@@ -27,7 +27,7 @@ ggplot(duration_df, aes(x = duration, y = count, fill = duration)) +
   labs(x = "Radicalization Duration",
        y = "Count",
        title = "Distribution of Radicalization Duration") +
-  scale_fill_manual(values = c("#0072B2", "#D55E00", "#E69F00")) +
+  scale_fill_manual(values = c("palevioletred", "paleturquoise", "thistle2")) +
   theme_minimal()
 ```
 1 = Short (less than a year)
@@ -48,7 +48,7 @@ Of the terrorists who cited a specific event for precipitating their attacks, th
 
 ```{r}
 ggplot(df, aes(x = factor(Beliefs_Trajectory))) +
-  geom_bar(fill = "blue") +
+  geom_bar(fill = "mediumpurple") +
   labs(title = "Beliefs Trajectory Distribution", x = "Beliefs Trajectory", y = "Count") +
   scale_x_discrete(labels = c("Gradual", "Key moments"))
 ```
@@ -58,7 +58,7 @@ In line with the previous analyses, it is not surprising that of the data we hav
 
 ```{r}
 ggplot(df, aes(x = factor(Behaviors_Trajectory))) +
-  geom_bar(fill = "blue") +
+  geom_bar(fill = "mediumseagreen") +
   labs(title = "Behavior Trajectory Distribution", x = "Behavior Trajectory", y = "Count") +
   scale_x_discrete(labels = c("Gradual", "Key moments"))
 ```
@@ -80,7 +80,7 @@ df_counts$sequence <- ifelse(df_counts$sequence == "1", "Beliefs first",
 ggplot(df_counts, aes(x="", y=count, fill=sequence)) + 
   geom_bar(stat="identity", width=1) + 
   coord_polar("y", start=0) +
-  scale_fill_manual(values=c("#66c2a5", "#fc8d62", "#8da0cb"), 
+  scale_fill_manual(values=c("palevioletred", "paleturquoise", "thistle2"), 
                     labels=c("Beliefs first", "Behaviors first", "Simultaneously")) +
   theme_void() +
   labs(title="Radicalization Sequence")

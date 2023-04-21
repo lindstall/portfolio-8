@@ -1,0 +1,92 @@
+---
+title: "portfolio 8"
+output: html_document
+date: "2023-04-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(dplyr)
+df <- read_excel("/Users/lindsaystall/Downloads/PIRUS_Public_May2020.xlsx")
+df[df == -99 | df == -88] <- NA
+```
+
+```{r}
+duration_counts <- table(df$Rad_duration)
+
+duration_df <- data.frame(duration = names(duration_counts),
+                          count = as.numeric(duration_counts))
+
+duration_df$duration <- factor(duration_df$duration, levels = c("1", "2", "3"))
+
+ggplot(duration_df, aes(x = duration, y = count, fill = duration)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Radicalization Duration",
+       y = "Count",
+       title = "Distribution of Radicalization Duration") +
+  scale_fill_manual(values = c("#0072B2", "#D55E00", "#E69F00")) +
+  theme_minimal()
+```
+1 = Short (less than a year)
+2 = Medium (between one and five years)
+3 = Long (more than five years)
+
+Most radicalization took 1-5 years before violent action, though many also took five+ years. I was honestly surprised the radicalizaton process prior to violence was so lengthy.
+
+
+```{r}
+df%>%
+  count(Event_Influence1) %>%
+  arrange(desc(n))
+```
+
+Of the terrorists who cited a specific event for precipitating their attacks, the top events were the Vietnam War, 9/11, and Arab Spring/Syrian Civil War. The vast majority did not cite a specific even as spurring on their attacks.
+
+
+```{r}
+ggplot(df, aes(x = factor(Beliefs_Trajectory))) +
+  geom_bar(fill = "blue") +
+  labs(title = "Beliefs Trajectory Distribution", x = "Beliefs Trajectory", y = "Count") +
+  scale_x_discrete(labels = c("Gradual", "Key moments"))
+```
+
+In line with the previous analyses, it is not surprising that of the data we have (excluding NA) most people cited a gradual belief radicalization.
+
+
+```{r}
+ggplot(df, aes(x = factor(Behaviors_Trajectory))) +
+  geom_bar(fill = "blue") +
+  labs(title = "Behavior Trajectory Distribution", x = "Behavior Trajectory", y = "Count") +
+  scale_x_discrete(labels = c("Gradual", "Key moments"))
+```
+
+Perhaps surprisingly, of the data we have (excluding NA) most people cited a key moment in spurring on their behavioral radicalization.
+
+
+```{r}
+df_filtered <- df[!is.na(df$Radicalization_Sequence),]
+
+counts <- table(df_filtered$Radicalization_Sequence)
+
+df_counts <- data.frame(sequence = names(counts), count = as.numeric(counts))
+
+df_counts$sequence <- ifelse(df_counts$sequence == "1", "Beliefs first", 
+                             ifelse(df_counts$sequence == "2", "Behaviors first", "Simultaneously"))
+
+
+ggplot(df_counts, aes(x="", y=count, fill=sequence)) + 
+  geom_bar(stat="identity", width=1) + 
+  coord_polar("y", start=0) +
+  scale_fill_manual(values=c("#66c2a5", "#fc8d62", "#8da0cb"), 
+                    labels=c("Beliefs first", "Behaviors first", "Simultaneously")) +
+  theme_void() +
+  labs(title="Radicalization Sequence")
+```
+
+
+Very interesting!!!! For most terrorists in the dataset, radicalization of behaviors preceded radicalization of beliefs, whereby the individual began undertaking illegal ideologically-motivated behavior before espousing radical beliefs. This totally goes against my preconceived notions. Very cool.
+
+

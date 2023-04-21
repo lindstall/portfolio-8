@@ -90,3 +90,22 @@ ggplot(df_counts, aes(x="", y=count, fill=sequence)) +
 Very interesting!!!! For most terrorists in the dataset, radicalization of behaviors preceded radicalization of beliefs, whereby the individual began undertaking illegal ideologically-motivated behavior before espousing radical beliefs. This totally goes against my preconceived notions. Very cool.
 
 
+```{r}
+df_filtered <- subset(df, !is.na(Prison_Radicalize))
+
+ggplot(df_filtered, aes(x = factor(Prison_Radicalize), fill = factor(Prison_Radicalize))) +
+  geom_bar() +
+  scale_fill_discrete(name = "Prison Radicalization", labels = c("No", "Yes (before)", "Yes (after)", "Yes (in prison)")) +
+  labs(title = "Prison Radicalization") +
+  xlab("Prison Radicalization") +
+  ylab("Count") 
+```
+
+0 = No, individual had reached maximum level of radicalization (in both behaviors and beliefs) before prison
+1 = Yes, but radicalization had begun (in either behaviors or belief) before prison
+26
+2 = Yes, but radicalization reached maximum level (in both behaviors and belief) after prison
+3 = Yes, radicalization began and reached maximum level in prison
+
+
+Most radicalization reached maximum level (in both behaviors and belief) after prison
